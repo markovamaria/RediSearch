@@ -157,7 +157,6 @@ def do_burst_threads_sanity(algo, data_type, test_name):
         debug_info = get_vecsim_debug_dict(env, 'idx', 'vector')
         expected_algo = 'TIERED' if algo in tiered_algos else algo
         env.assertEqual(debug_info['ALGORITHM'], expected_algo)
-        #env.assertEqual(debug_info['ALGORITHM'], 'TIERED' if algo == 'HNSW' else algo)
         if algo in tiered_algos:
             env.assertEqual(debug_info['BACKGROUND_INDEXING'], 0,
                             message=f"{'before loading' if i==1 else 'after loading'}")
@@ -178,9 +177,6 @@ def do_burst_threads_sanity(algo, data_type, test_name):
 # Generate test functions for each combination of algorithm and data type
 func_gen = lambda al, dt, tn: lambda: do_burst_threads_sanity(al, dt, tn)
 for algo in VECSIM_ALGOS:
-    #TODO: enable when multi is supported
-    #if algo == 'SVS-VAMANA':
-    #    continue
     for data_type in VECSIM_DATA_TYPES:
         if algo == "SVS-VAMANA" and data_type not in ("FLOAT16", "FLOAT32"):
             continue
