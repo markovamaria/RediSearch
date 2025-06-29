@@ -151,7 +151,8 @@ def do_burst_threads_sanity(algo, data_type, test_name):
     env.assertAlmostEqual(float(res_before[2][1]), 0, 1e-5)
     waitForRdbSaveToFinish(env)
 
-    tiered_algos = {'HNSW', 'SVS-VAMANA'}
+    # TODO: add 'SVS-VAMANA' to tiered_algos after support of serializing svs index will be added
+    tiered_algos = {'HNSW'}
 
     for i in env.reloadingIterator():
         debug_info = get_vecsim_debug_dict(env, 'idx', 'vector')
@@ -177,6 +178,9 @@ def do_burst_threads_sanity(algo, data_type, test_name):
 # Generate test functions for each combination of algorithm and data type
 func_gen = lambda al, dt, tn: lambda: do_burst_threads_sanity(al, dt, tn)
 for algo in VECSIM_ALGOS:
+    # TODO: add 'SVS-VAMANA' to tiered_algos after support of serializing svs index will be added
+    if algo == "SVS-VAMANA":
+        continue
     for data_type in VECSIM_DATA_TYPES:
         if algo == "SVS-VAMANA" and data_type not in ("FLOAT16", "FLOAT32"):
             continue
